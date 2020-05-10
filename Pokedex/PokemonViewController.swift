@@ -2,6 +2,7 @@ import UIKit
 
 class PokemonViewController: UIViewController {
     var url: String!
+    var isCaught: Bool?
 
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var numberLabel: UILabel!
@@ -20,6 +21,7 @@ class PokemonViewController: UIViewController {
         numberLabel.text = ""
         type1Label.text = ""
         type2Label.text = ""
+        setCatchButtonLabel()
 
         loadPokemon()
     }
@@ -45,11 +47,39 @@ class PokemonViewController: UIViewController {
                             self.type2Label.text = typeEntry.type.name
                         }
                     }
+                    // Note: Unwrapping optinal bools.
+                    // https://stackoverflow.com/a/25523476/11249670
+                    if self.isCaught ?? false {
+                        self.setCatchButtonLabel()
+                    } else {
+                        self.isCaught = false
+                        self.setCatchButtonLabel()
+                    }
                 }
             }
             catch let error {
                 print(error)
             }
         }.resume()
+    }
+
+    // Called when the catch button is clicked.
+    @IBAction func toggleCatch() {
+        if self.isCaught ?? false{
+            self.isCaught = false
+        } else {
+            self.isCaught = true
+        }
+        setCatchButtonLabel()
+    }
+
+    func setCatchButtonLabel() {
+        var buttonLabel: String
+        if self.isCaught ?? false{
+            buttonLabel = "Release"
+        } else {
+            buttonLabel = "Catch"
+        }
+        self.catchButton.setTitle(buttonLabel, for: .normal)
     }
 }
