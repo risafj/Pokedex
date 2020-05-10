@@ -93,11 +93,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rdI-GB-YhW">
+                                <rect key="frame" x="187" y="564" width="41" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Catch"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="cVc-In-IFv"/>
                     </view>
                     <connections>
+                        <outlet property="catchButton" destination="rdI-GB-YhW" id="1HB-gi-aWo"/>
                         <outlet property="nameLabel" destination="Zti-lO-HCX" id="4yz-Df-XpM"/>
                         <outlet property="numberLabel" destination="Sja-25-iqf" id="cj5-fb-cuF"/>
                         <outlet property="type1Label" destination="pSm-0Z-rVe" id="OOi-5I-FB3"/>
