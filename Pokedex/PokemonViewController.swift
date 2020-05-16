@@ -2,7 +2,8 @@ import UIKit
 
 class PokemonViewController: UIViewController {
     var url: String!
-    var isCaught: Bool?
+    var pokemonId: Int!
+    var caughtPokemon: [Int]!
 
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var numberLabel: UILabel!
@@ -10,20 +11,23 @@ class PokemonViewController: UIViewController {
     @IBOutlet var type2Label: UILabel!
     @IBOutlet var catchButton: UIButton!
 
-    func capitalize(text: String) -> String {
-        return text.prefix(1).uppercased() + text.dropFirst()
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        // https://www.hackingwithswift.com/example-code/system/how-to-save-user-settings-using-userdefaults
+        caughtPokemon = UserDefaults.standard.array(forKey: "CaughtPokemon") as? [Int] ?? []
+        print("caughtPokemon.count is \(caughtPokemon.count)")
 
         nameLabel.text = ""
         numberLabel.text = ""
         type1Label.text = ""
         type2Label.text = ""
-        setCatchButtonLabel()
-
         loadPokemon()
+    }
+
+
+    func capitalize(text: String) -> String {
+        return text.prefix(1).uppercased() + text.dropFirst()
     }
 
     func loadPokemon() {
@@ -35,6 +39,10 @@ class PokemonViewController: UIViewController {
             do {
                 let result = try JSONDecoder().decode(PokemonResult.self, from: data)
                 DispatchQueue.main.async {
+                    // Making the id accessible throughout the file.
+                    self.pokemonId = result.id
+                    print("pokemonId is \(String(describing: self.pokemonId))")
+
                     self.navigationItem.title = self.capitalize(text: result.name)
                     self.nameLabel.text = self.capitalize(text: result.name)
                     self.numberLabel.text = String(format: "#%03d", result.id)
@@ -47,14 +55,7 @@ class PokemonViewController: UIViewController {
                             self.type2Label.text = typeEntry.type.name
                         }
                     }
-                    // Note: Unwrapping optinal bools.
-                    // https://stackoverflow.com/a/25523476/11249670
-                    if self.isCaught ?? false {
-                        self.setCatchButtonLabel()
-                    } else {
-                        self.isCaught = false
-                        self.setCatchButtonLabel()
-                    }
+                    self.setCatchButtonLabel()
                 }
             }
             catch let error {
@@ -65,21 +66,21 @@ class PokemonViewController: UIViewController {
 
     // Called when the catch button is clicked.
     @IBAction func toggleCatch() {
-        if self.isCaught ?? false{
-            self.isCaught = false
+        if caughtPokemon.contains(pokemonId) {
+            // Remove id from caughtPokemon.
+            // https://stackoverflow.com/a/24051661/11249670
+            caughtPokemon = caughtPokemon.filter { $0 != pokemonId }
         } else {
-            self.isCaught = true
+            // Add id to caughtPokemon.
+            caughtPokemon.append(pokemonId)
+            UserDefaults.standard.set(caughtPokemon, forKey: "CaughtPokemon")
         }
         setCatchButtonLabel()
     }
 
     func setCatchButtonLabel() {
-        var buttonLabel: String
-        if self.isCaught ?? false{
-            buttonLabel = "Release"
-        } else {
-            buttonLabel = "Catch"
-        }
+        print("setCatchButtonLabel is called")
+        let buttonLabel = caughtPokemon.contains(pokemonId) ? "Release" : "Catch"
         self.catchButton.setTitle(buttonLabel, for: .normal)
     }
 }
