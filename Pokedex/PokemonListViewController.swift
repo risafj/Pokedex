@@ -69,13 +69,12 @@ class PokemonListViewController: UITableViewController, UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             displayPokemon = pokemon
-            return
-        }
-
-        displayPokemon = []
-        for p in pokemon {
-            if p.name.contains(searchText.lowercased()) {
-                displayPokemon.append(p)
+        } else {
+            displayPokemon = []
+            for p in pokemon {
+                if p.name.contains(searchText.lowercased()) {
+                    displayPokemon.append(p)
+                }
             }
         }
         tableView.reloadData()
