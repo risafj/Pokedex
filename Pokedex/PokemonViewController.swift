@@ -16,7 +16,6 @@ class PokemonViewController: UIViewController {
 
         // https://www.hackingwithswift.com/example-code/system/how-to-save-user-settings-using-userdefaults
         caughtPokemon = UserDefaults.standard.array(forKey: "CaughtPokemon") as? [Int] ?? []
-        print("caughtPokemon.count is \(caughtPokemon.count)")
 
         nameLabel.text = ""
         numberLabel.text = ""
@@ -41,7 +40,6 @@ class PokemonViewController: UIViewController {
                 DispatchQueue.main.async {
                     // Making the id accessible throughout the file.
                     self.pokemonId = result.id
-                    print("pokemonId is \(String(describing: self.pokemonId))")
 
                     self.navigationItem.title = self.capitalize(text: result.name)
                     self.nameLabel.text = self.capitalize(text: result.name)
@@ -79,7 +77,6 @@ class PokemonViewController: UIViewController {
     }
 
     func setCatchButtonLabel() {
-        print("setCatchButtonLabel is called")
         let buttonLabel = caughtPokemon.contains(pokemonId) ? "Release" : "Catch"
         self.catchButton.setTitle(buttonLabel, for: .normal)
     }
