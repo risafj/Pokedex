@@ -42,6 +42,12 @@ class PokemonViewController: UIViewController {
                     // Making the id accessible throughout the file.
                     self.pokemonId = result.id
 
+                    // Load image synchronously
+                    // https://stackoverflow.com/a/27517280/11249670
+                    let imageUrl = URL(string: result.sprites.front_default)
+                    let data = try? Data(contentsOf: imageUrl!)
+                    self.pokemonImage.image = UIImage(data: data!)
+
                     self.navigationItem.title = self.capitalize(text: result.name)
                     self.nameLabel.text = self.capitalize(text: result.name)
                     self.numberLabel.text = String(format: "#%03d", result.id)
