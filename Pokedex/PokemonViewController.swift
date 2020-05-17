@@ -11,6 +11,7 @@ class PokemonViewController: UIViewController {
     @IBOutlet var type2Label: UILabel!
     @IBOutlet var catchButton: UIButton!
     @IBOutlet var pokemonImage: UIImageView!
+    @IBOutlet var pokemonDescription: UITextView!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
