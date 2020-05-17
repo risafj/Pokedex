@@ -82,7 +82,8 @@ class PokemonViewController: UIViewController {
                 let result = try JSONDecoder().decode(PokemonDescriptionResult.self, from: data)
                 let description = result.flavor_text_entries.first(where: { $0.language.name == "en" })?.flavor_text ?? ""
                 DispatchQueue.main.async {
-                    self.pokemonDescription.text = description
+                    // Getting rid of random newline characters in the description.
+                    self.pokemonDescription.text = description.replacingOccurrences(of: "\n", with: " ")
                 }
             }
             catch let error {
