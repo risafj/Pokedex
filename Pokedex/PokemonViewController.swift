@@ -25,7 +25,6 @@ class PokemonViewController: UIViewController {
         loadPokemon()
     }
 
-
     func capitalize(text: String) -> String {
         return text.prefix(1).uppercased() + text.dropFirst()
     }
@@ -42,11 +41,9 @@ class PokemonViewController: UIViewController {
                     // Making the id accessible throughout the file.
                     self.pokemonId = result.id
 
-                    // Load image synchronously
-                    // https://stackoverflow.com/a/27517280/11249670
-                    let imageUrl = URL(string: result.sprites.front_default)
-                    let data = try? Data(contentsOf: imageUrl!)
-                    self.pokemonImage.image = UIImage(data: data!)
+                    if let imageUrl = URL(string: result.sprites.front_default) {
+                        self.pokemonImage.load(imageUrl: imageUrl)
+                    }
 
                     self.navigationItem.title = self.capitalize(text: result.name)
                     self.nameLabel.text = self.capitalize(text: result.name)
@@ -86,5 +83,20 @@ class PokemonViewController: UIViewController {
     func setCatchButtonLabel() {
         let buttonLabel = caughtPokemon.contains(pokemonId) ? "Release" : "Catch"
         self.catchButton.setTitle(buttonLabel, for: .normal)
+    }
+}
+
+// https://www.hackingwithswift.com/example-code/uikit/how-to-load-a-remote-image-url-into-uiimageview
+extension UIImageView {
+    func load(imageUrl: URL) {
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: imageUrl) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.image = image
+                    }
+                }
+            }
+        }
     }
 }
