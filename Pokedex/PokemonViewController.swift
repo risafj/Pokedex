@@ -42,6 +42,8 @@ class PokemonViewController: UIViewController {
                     // Making the id accessible throughout the file.
                     self.pokemonId = result.id
 
+                    self.loadDescription()
+
                     if let imageUrl = URL(string: result.sprites.front_default) {
                         self.pokemonImage.load(imageUrl: imageUrl)
                     }
@@ -59,6 +61,28 @@ class PokemonViewController: UIViewController {
                         }
                     }
                     self.setCatchButtonLabel()
+                }
+            }
+            catch let error {
+                print(error)
+            }
+        }.resume()
+    }
+
+    func loadDescription() {
+        guard let pokemonId = pokemonId, let requestUrl = URL(string: "https://pokeapi.co/api/v2/pokemon-species/\(pokemonId)") else {
+            return
+        }
+        URLSession.shared.dataTask(with: requestUrl) { (data, response, error) in
+            guard let data = data else {
+                return
+            }
+
+            do {
+                let result = try JSONDecoder().decode(PokemonDescriptionResult.self, from: data)
+                let description = result.flavor_text_entries.first(where: { $0.language.name == "en" })?.flavor_text ?? ""
+                DispatchQueue.main.async {
+                    self.pokemonDescription.text = description
                 }
             }
             catch let error {
