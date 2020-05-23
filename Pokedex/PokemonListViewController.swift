@@ -79,4 +79,8 @@ class PokemonListViewController: UITableViewController, UISearchBarDelegate {
         }
         tableView.reloadData()
     }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
 }
